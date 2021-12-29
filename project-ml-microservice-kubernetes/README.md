@@ -48,3 +48,32 @@ source .devops/bin/activate
 * Setup and Configure Kubernetes locally
 * Create Flask app in Container
 * Run via kubectl
+
+### Project Files and Details:
+* Project folder contains files that are required to create docker container,kubernetes pod and all plugins required for installation. LEts take a look at the files,
+    * app.py - its the main python application file.
+    * Makefile - its a make file to be used for the project setup and running in the environment. ensure the Make is installed. if windows machine is used, please install using scoop.
+    * Dockerfile - this is main docker file , has key information for creating ikage and running it.
+    * requirement.txt - this is immportant file, given as input to Makefile. sometimes you may face issue with the plugins, so take a look at this and ensure that you have proper version of plugin relvant to python3.7.
+    * run_docker.sh,run_kubernetes.sh - shell script to run docker and kubernetes command. the run kubernetes command might had to be run few times, as the pod creation will happen in background. Fetch the kubernetes pod running status, if the pod is running then execute run_kubernetes.sh again to make the port in listening pode. 
+    * upload_docker.sh - the shell script is used to upload the docker image creating using run_docker.sh. when this is executed you will be prompted to enter password. Please loginto dockerhub to confirm the docker image is uploaded. This is important because the run_kubernetes script will pull the docker image from the dockerhub only.
+    * make_prediction.sh - its a prediction input script, run it when the docker and kubernetes are running the app to get the output.
+    * .circleci/config.yml - its the circle configuration file to support devops deployement.
+
+### Executing the scripts:
+* Ensure the project environment is setup correctly. Ensure python 3.7 is installed and the class path is set. in Windows use the following command in the project directory to create virtual environment and activate it.
+    * py -m venv devops
+    * Goto the devops/Scripts, then hit activate.bat
+    * you should see the terminal and something like below can be  observed.
+* Ensure the Makefile is updated with required details, if there are intendation error, Make will throw error. Once the issues are resolved on the termail where the local environment is enabled, hit "make install"
+* Encure the Docker file is having the right details. Verify the port is exposed and it has the CMD command to run app.py file on startup. Once Docker file is completed run the command "make lint" to ensure no errors in the terminal.
+* Ensure the run_docker.sh files has the proper details to create docker image with tag attribute and exposing the port as expected. run the file as ./run_docker.sh 
+* run the make_prediction.sh to see the app is working and capture the output.Run the file as ./make_prediction.sh
+* run the upload_docker.sh to upload the docker image create in previous step into Dockerhub. Please ensure the tag used in previous steps for docker image creaiton is mentioned in this upload script also. Ensure the correct username is given.Run the file as ./upload_docker.sh
+* once you have minikube installed, open the termail and hit the command "minikube start", this will create a image in docker and minikube will start with a cluster.
+* execute the run_kubernetes.sh with the command ./run_kubernetes.sh . This command will try creating a pod. Ensure thhat pod is running using the command "kubectl ged pod". Once the pod is in running state , run the run_kubernetes.sh command again to ensure pod is listenening to port. 
+
+
+
+
+
