@@ -5,11 +5,17 @@
 
 # Step 1:
 # Create dockerpath
-# dockerpath=<your docker ID/path>
+dockerpath=sraghuraman27/udacity-devopsapi
 
 # Step 2:  
 # Authenticate & tag
 echo "Docker ID and Image: $dockerpath"
+winpty docker login -u sraghuraman27
+winpty docker tag devopsapi $dockerpath
 
 # Step 3:
 # Push image to a docker repository
+echo "Docker ID and Image pushing to docker hub: $dockerpath"
+winpty docker push $dockerpath
+
+cmd /k
